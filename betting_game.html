@@ -2,9 +2,33 @@
 <html>
 <head>
   <script src="jquery-2.1.4.js"></script>
-  <script src="betting_game.js"></script>
+  <script type="text/javascript" src="betting_game.js"></script>
 </head>
 <body>
-  <button onclick="game()">Start</button>
+  <div>
+    <h1>Betting Game</h1>
+    <div>
+      <h4>Rules</h4>
+      <ul>
+        <li>Bet between $5 and $10</li>
+        <li>Choose a number 1 - 10</li>
+        <li>If you guess the computer's value, you win the bet!</li>
+      </ul>
+    </div>
+    <div id="game_area" class="well">
+      <p>
+        Bet amount: <input type="number" id="betAmount"></input>
+        Number: <input type="number" id="number"></input>
+        <button id="betButton">Bet</button>
+      </p>
+    </div>
+    <div>
+      <h2 id="message"></h2>
+    </div>
+    <div>
+      <h2>Your current balance is:</h2>
+      <p id="balance"></p>
+    </div>
+  </div>
 </body>
 </html>

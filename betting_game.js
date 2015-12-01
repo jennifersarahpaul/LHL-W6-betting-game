@@ -1,51 +1,57 @@
 //Single-player betting game
 
-var bankroll = 20;
+$(document).ready(function() {
 
-var round = function(userBet, userChoice, computerChoice) {
-  if (userChoice === computerChoice) {
-    bankroll += userBet;
-    alert("You guessed correctly! You win $" + userBet + ". Your running total is now $" + bankroll + ".");
-  } else {
-    if (userChoice + 1 === computerChoice || userChoice - 1 === computerChoice) {
-      alert("You guessed incorrectly, but you were close. Your bankroll remains at $" + bankroll + ".");
+  $("#betButton").click(function() {
+    game();
+    $("#balance").text("$" + bankroll);
+  });
+
+  var bankroll = 100;
+
+  var game = function() {
+    var message = '';
+    var computerChoice = Math.floor((Math.random() * 10) + 1);
+    console.log(computerChoice);
+    var userBet = $("#betAmount").val();
+    var userChoice = $("#number").val();
+    if (canGame(userChoice, userBet)) {
+      message = round(userBet, userChoice, computerChoice);
+    } else {
+      message = "You didn't input the right criteria.";
+    }
+    $("#message").text(message);
+  };
+
+  var canGame = function(userChoice, userBet) {
+    return (
+      userChoice && 
+      userBet && 
+      userChoice >= 1 && 
+      userChoice <= 10 && 
+      userBet >= 5 && 
+      userBet <= 10
+    );
+  };
+
+  var round = function(userBet, userChoice, computerChoice) {
+    userBet = parseInt(userBet);
+    var message = "";
+    if (userChoice == computerChoice) {
+      bankroll += userBet;
+      message = "You guessed correctly! You win $" + userBet + ".";
+    } else if (Math.abs(userChoice - computerChoice) <= 1) { 
+        message = "You guessed incorrectly, but you were close. Your bankroll remains the same.";   
     } else {
       bankroll -= userBet; 
-      alert("You guessed incorrectly. You lose $" + userBet + ". Your running total is now $" + bankroll + ".");
+      message = "You guessed incorrectly. You lose $" + userBet + ".";
     }
-  }
-};
+    return message;
+  };
+});
 
-var getNumber = function(text, min, max) {
-  var value = prompt(text);
-  if(value) {
-    var number = parseInt(value, 10);
-    if(min && number < min) {
-      return false;
-    }
-    if(max && number > max) {
-      return false;
-    }
-    return number;
-  } else {
-    return false;
-  }
-};
-
-var game = function() {
-  while (bankroll > 0) {
-    var computerChoice = Math.floor((Math.random() * 10) + 1);
-    if (bankroll <= 5) {
-      var userBet = getNumber("You can bet your last $5.", 5, 5); 
-    } else {
-      var userBet = getNumber("How much money are you betting? Choose from $5 to $10 (value only).", 5, 10); 
-    }
-    var userChoice = getNumber("Guess a number between 1 and 10:", 1, 10);
-    if (userBet && userChoice) {
-      round(userBet, userChoice, computerChoice);
-    } else {
-      alert("You didn't input the right type of numbers.");
-    }
-  }
-};
-
+/* TODO:
+  - add behaviour for when bankroll <= 5 (fadeOut()?)
+  - make a restart button
+  - show player's balance in a cool way 
+  - overall formatting */
